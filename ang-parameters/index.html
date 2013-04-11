@@ -1,0 +1,80 @@
+<html ng-app="myApp">
+  
+  <head>
+  <title>Angular.js parameter passing</title>
+    <script type="text/javascript">
+      var mealNames = ["breakfast", "dinner"];
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
+    <script src="app.js"></script>
+    <style>
+      table.t1 { margin: 1em 0; border-collapse: collapse; }
+      .t1 tr { border: 1px solid #666; }
+      .t1 td { padding: 10px; }
+    </style>
+  </head>
+  
+  <body>
+  <p>Why this page?  Well, I needed to pass in values to Angular.js controllers, and 
+  realized there is a lot of discussion, there isn't a practical listing of examples...
+  hence this page.  </p>
+  <p>There 
+
+    <hr>
+    <div ng-init="stupid='golden maple syrup'" ng-controller="FoodParentCtrl">
+    <h3>1.  Declare the variable in the controller's HTML tag.</h3>
+
+      <p>A simple method for injecting a static variable when you create a controller.  To
+      use in your .js file, you can bind it to $scope and then use it.  In the following case,
+      that variable is named $scope.foods, and the expected value is "golden maple syrup".
+      
+      </p>Result: <i>{{foods}}</i>
+
+    <h3>ng-init method</h3>
+
+      <p>Inject a variable directly into the $scope of the controller with ng-init.
+      No need to use $scope or anything, just use the naked variable name.
+      </p>Result: <i>{{stupid}}</i>
+
+    <h3>2. Use the factory!</h3>
+
+      <p>Request a simple value from a factory with a no-parameter method</p>
+      
+      Result: <i>{{factoryFoods}}</i>
+
+    <h3>3. Use the factory, with a parameter!</h3>
+
+      <p>Request a value from a factory method.  Declare a value, then assign the
+      $scope.&lt;variable&gt; to the result of function call.  Again, the action's all in 
+      the app.js file.</p>Result:
+      <ul>
+        
+      <li><i>{{factoryFoodsTaco}}</i></li>
+      <li><i>{{factoryFoodsSushi}}</i></li>
+      </ul>
+
+    <h3>4.  Use the factory, but use values defined in Javascript outside of angular</h3>
+
+      <p>Use the factory to access global window variables.  This was the original problem
+      I was solving--I wanted my Angular page to be driven by variables declared in index.html,
+      and not in some Angular service or other .js file.   I need to use index.html as I'm 
+      moving over web pages generated with Python Flask, and it's easy in Flask  to 
+      return a single index.html file the the HTTP browser client that's rendered by the Flask template engine.
+      
+      Again, the action is in app.js.
+      
+        <br>Expect breakfast and dinner!</p>Result: <i>{{mealNames}}</i>
+        
+    <h3>5.  Use a Window variable to create repeating child contollers, each handling a single array value.</h3>
+    
+        <p> This just shows a way to have a Angular.js repeating controller that's bound to items in an Javascript array declared in index.html.<p>
+          <table class="t1">
+          <tr ng-repeat="meal in mealNames" ng-controller="MealItemsCtrl">
+            <td>{{meal}} (and here it is with an s on the end): {{itemPlural}}</td>
+          </tr>
+          </table>
+
+    </div>
+  </body>
+
+</html>
