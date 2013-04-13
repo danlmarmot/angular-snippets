@@ -1,0 +1,66 @@
+<html ng-app="myApp">
+  
+  <head>
+    <script type="text/javascript">
+      var mealNames = ["breakfast", "dinner"];
+      var market = {
+        "vendors":[{
+            "name": "ch",
+            "fruitList": [
+              {"name": "apple", "qty": 10},
+              {"name": "mango", "qty": 20},
+              {"name": "banana", "qty": 30}
+              ]
+            },
+            {
+            "name": "st",
+            "fruitList": [
+              {"name": "orange", "qty": 21},
+              {"name": "mango", "qty": 41},
+              {"name": "peach", "qty": 51}
+              ]
+            }]
+        };
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
+    <script src="app.js"></script>
+    <style>
+      table.t1 { margin: 1em 0; border-collapse: collapse; }
+      .t1 tr { border: 1px solid #666; }
+      .t1 td { padding: 10px; }
+    </style>
+  </head>
+  
+  <body>
+  <h2>How to group an array.</h2>
+
+    <hr>
+    <div ng-controller="FoodParentCtrl">
+
+    <h3>Define the market.</h3>
+
+      <p>Note that the market has vendors, and each vendor has fruit for sale.  A type of fruit, like an apple, can be
+        sold at more than one vendor, but sometimes a fruit will only be at one vendor.
+
+      <p>The market, which is defined in the &lt;head&gt; of this page.  Expect a list of two vendors with three fruit types for sale:</p>
+      Result: <i>{{market}}</i>
+
+    <hr>
+
+    <h3>Fruits by vendor</h3>
+
+    <p>Here I want to group the fruits sold, and display them by vendor.  Here's the raw data:</p>
+    Result: <i>{{fruitsByVendor}}</i>
+    <hr>
+
+    <h3>Use a Window variable to create repeating child contollers, each handling a single array value.</h3>
+          <table class="t1">
+          <tr ng-repeat="(fruit,details) in fruitsByVendor.fruitList" ng-controller="MealItemsCtrl">
+            <td>{{fruit}}, {{details}}</td>
+          </tr>
+          </table>
+
+    </div>
+  </body>
+
+</html>
