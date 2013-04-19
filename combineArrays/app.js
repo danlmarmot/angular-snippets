@@ -50,6 +50,10 @@ app.controller("FoodParentCtrl", function FoodParentCtrl($scope, configFactory) 
   $scope.market1 = getFirstItem($scope.market);
 
   $scope.fruitsByVendor = getFruitsByVendor($scope.market);
+
+  //build out the table
+  $scope.fruitsInMarket = getFruitInventory($scope.fruitsByVendor);
+
 });
 
 function getFirstItem(a) {
@@ -59,17 +63,16 @@ function getFirstItem(a) {
 function getFruitsByVendor(market) {
     var r = {};
     r.vendorList=[];    // list of vendors
-    r.fruitList = {};   // list of objects like {fruit, [{vendor.name, qty},{vendor2, qty}]} objects
-
+    r.fruitObj = {};   // list of objects like {fruit, [{vendor.name, qty},{vendor2, qty}]} objects
 
     market.vendors.forEach(function (v) {
-        r.vendorList.push(v.name);
+        r.vendorList.push({name:v.name});
 
         v.fruitList.forEach(function(fruit) {
-            if(r.fruitList[fruit.name]){
-                r.fruitList[fruit.name].push({"vendor": v.name, "qty": fruit.qty});
+            if(r.fruitObj[fruit.name]){
+                r.fruitObj[fruit.name].push({"vendor": v.name, "qty": fruit.qty});
             } else {
-                r.fruitList[fruit.name] = [{"vendor": v.name, "qty": fruit.qty}];
+                r.fruitObj[fruit.name] = [{"vendor": v.name, "qty": fruit.qty}];
             }
         });
     });
@@ -77,7 +80,33 @@ function getFruitsByVendor(market) {
     return r;
 }
 
+function getFruitInventory(fruitsByVendor) {
+    var r = {};
+    r.fruitList = {};   // list of objects like {fruit, [{vendor.name, qty},{vendor2, qty}]} objects
+    r.fruitGrid =[];
 
+    // build headers
+    r.tableHead =[
+        {display: "Frouit", column: "fruit"}
+        ];
+    fruitsByVendor.vendorList.forEach(function (v) {
+        r.tableHead.push({display: v.name, column: v.name})
+    });
+
+
+    // build grid
+    for (f in fruitsByVendor.fruitList) if (fruitsByVendor.hasOwnProperty(f)) {
+        r.fruitGrid.push({display: f});
+    }
+//    market
+//    r.fruitGrid.push({name:})
+
+
+
+
+    return r;
+
+}
 
 // Child control to show meal items
 // Note the parameter meal is the iterator, and changes with every new controller
