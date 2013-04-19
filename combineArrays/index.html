@@ -55,7 +55,7 @@
 
     <h3>Use a Window variable to create repeating child contollers, each handling a single array value.</h3>
           <table class="t1">
-          <tr ng-repeat="(fruit,details) in fruitsByVendor.fruitList" ng-controller="MealItemsCtrl">
+          <tr ng-repeat="(fruit,details) in fruitsByVendor.fruitObj" ng-controller="MealItemsCtrl">
             <td>{{fruit}}, {{details}}</td>
           </tr>
           </table>
@@ -65,17 +65,17 @@
     <hr>
     <div ng-controller="FoodParentCtrl">
     <h3>Table table table</h3>
-        {{fruitsInMarket}}
+        {{fruitsInventory}}
       <table class="table-bordered table-striped table-condensed table small">
         <thead>
         <tr>
-            <th ng:repeat="th in fruitsInMarket.tableHead" ng:class="sortClass(th.column)" ng:click="changeSorting(th.column)">{{th.display}}</th>
+            <th ng:repeat="th in fruitsInventory.tableHead" ng:class="sortClass(th.column)" ng:click="changeSorting(th.column)">{{th.display}}</th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="f in fruitsInMarket.fruitGrid | orderBy:sort.column:sort.descending">
-            <td>{{f.display}}</td>
-            <td ng-repeat="n in f.vendorQtys">{{n}}</td>
+        <tr ng-repeat="f in fruitsInventory.tableGrid | orderBy:sort.column:sort.descending">
+            <td>{{f}} ** </td>
+            <td ng-repeat="n in f.vendorQtys">-- {{n}} -- </td>
         </tr>
         </tbody>
       </table>

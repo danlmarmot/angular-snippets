@@ -52,7 +52,7 @@ app.controller("FoodParentCtrl", function FoodParentCtrl($scope, configFactory) 
   $scope.fruitsByVendor = getFruitsByVendor($scope.market);
 
   //build out the table
-  $scope.fruitsInMarket = getFruitInventory($scope.fruitsByVendor);
+  $scope.fruitsInventory = getFruitInventory($scope.fruitsByVendor);
 
 });
 
@@ -64,6 +64,7 @@ function getFruitsByVendor(market) {
     var r = {};
     r.vendorList=[];    // list of vendors
     r.fruitObj = {};   // list of objects like {fruit, [{vendor.name, qty},{vendor2, qty}]} objects
+    r.fruitList = [];
 
     market.vendors.forEach(function (v) {
         r.vendorList.push({name:v.name});
@@ -77,34 +78,55 @@ function getFruitsByVendor(market) {
         });
     });
 
+    for (f in r.fruitObj) if (r.fruitObj.hasOwnProperty(f)) {
+        r.fruitList.push({name:f});
+    }
+
     return r;
 }
 
 function getFruitInventory(fruitsByVendor) {
-    var r = {};
-    r.fruitList = {};   // list of objects like {fruit, [{vendor.name, qty},{vendor2, qty}]} objects
-    r.fruitGrid =[];
+    var vendors = fruitsByVendor.vendorList;
+    var fruits = fruitsByVendor.fruitObj;
 
+    var r = {};
     // build headers
     r.tableHead =[
         {display: "Frouit", column: "fruit"}
         ];
-    fruitsByVendor.vendorList.forEach(function (v) {
+    vendors.forEach(function (v) {
         r.tableHead.push({display: v.name, column: v.name})
     });
 
+    // build display grid
+    // the display grid shows which fruits are available by each vendor
+    r.tableGrid =[];
 
-    // build grid
-    for (f in fruitsByVendor.fruitList) if (fruitsByVendor.hasOwnProperty(f)) {
-        r.fruitGrid.push({display: f});
+    for (f in fruits) if (fruits.hasOwnProperty(f)) {
+        var tableGridRow = [];
+        tableGridRow.push(f);
+
+        var qtys = vendors.map(function(v) {
+            // the empty cell
+            var bar = "-";
+
+            fruits[f].forEach(function(qt){
+                if (qt.vendor == v.name) {
+                    bar = qt.qty;
+                }
+            });
+
+            return bar;
+        });
+
+        // append quantites by vendor to the row
+        tableGridRow.push.apply(tableGridRow, qtys);
+
+        r.tableGrid.push(tableGridRow);
     }
-//    market
-//    r.fruitGrid.push({name:})
-
-
-
 
     return r;
+
 
 }
 
