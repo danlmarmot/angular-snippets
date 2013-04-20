@@ -40,10 +40,7 @@ app.factory('configFactory', ['$window', function(win) {
 
 // contorller that will survive minification.  Does the same thing
 app.controller("FoodParentCtrl", function FoodParentCtrl($scope, configFactory) {
-  $scope.foods = ["pizza", "beer"];
-  $scope.factoryFoods = configFactory.getMealType();
-  $scope.factoryFoodsTaco = configFactory.getCuisineType("taco");
-  $scope.factoryFoodsSushi = configFactory.getCuisineType("sushi");
+
   $scope.mealNames = configFactory.getMealNames();
   $scope.market = configFactory.getMarket();
 
@@ -51,8 +48,35 @@ app.controller("FoodParentCtrl", function FoodParentCtrl($scope, configFactory) 
 
   $scope.fruitsByVendor = getFruitsByVendor($scope.market);
 
-  //build out the table
+  //build out the table and add sorting
   $scope.fruitsInventory = getFruitInventory($scope.fruitsByVendor);
+  $scope.fruitGrid = getFruitGrid($scope.fruitsByVendor);
+
+  $scope.sort = {
+        column: 'fruit',
+        descending: false
+  };
+
+  $scope.changeSorting = function(column) {
+        var sort = $scope.sort;
+        if (sort.column == column) {
+            sort.descending = !sort.descending;
+        } else {
+            sort.column = column;
+            sort.descending = false;
+        }
+  };
+
+  //use CSS to show the sort status of  header cells
+  $scope.sortClass = function(column) {
+        console.log("$scope.sort.column is " + $scope.sort.column);
+        console.log("$scope.sort.descending is " + $scope.sort.descending);
+        if ($scope.sort.descending) {
+            return column == $scope.sort.column && "header headerSortDown";
+        } else {
+            return column == $scope.sort.column && "header headerSortUp";
+        }
+    };
 
 });
 
@@ -92,7 +116,7 @@ function getFruitInventory(fruitsByVendor) {
     var r = {};
     // build headers
     r.tableHead =[
-        {display: "Frouit", column: "fruit"}
+        {display: "Froot", column: "fruit"}
         ];
     vendors.forEach(function (v) {
         r.tableHead.push({display: v.name, column: v.name})
@@ -100,34 +124,62 @@ function getFruitInventory(fruitsByVendor) {
 
     // build display grid
     // the display grid shows which fruits are available by each vendor
+    // we want a grid that looks like this:
+    // grid = [ {"fruit":"apple","ch":"10","st":"10"} , {"fruit":"orange"... ]}
     r.tableGrid =[];
 
     for (f in fruits) if (fruits.hasOwnProperty(f)) {
-        var tableGridRow = [];
-        tableGridRow.push(f);
+        var tableGridRow = {"fruit": f};
 
         var qtys = vendors.map(function(v) {
-            // the empty cell
-            var bar = "-";
-
             fruits[f].forEach(function(qt){
                 if (qt.vendor == v.name) {
-                    bar = qt.qty;
-                }
+                    tableGridRow[v.name] = qt.qty;
+                } else
+                    tableGridRow[v.name] = '-';
             });
-
-            return bar;
         });
 
         // append quantites by vendor to the row
-        tableGridRow.push.apply(tableGridRow, qtys);
+        //tableGridRow.push.apply(tableGridRow, qtys);
 
         r.tableGrid.push(tableGridRow);
     }
 
     return r;
+}
 
+function getFruitGrid(fruitsByVendor) {
+    var vendors = fruitsByVendor.vendorList;
+    var fruits = fruitsByVendor.fruitObj;
 
+//    var r = {};
+//    // build headers
+//    r.tableHead =[
+//        {display: "Frouit", column: "fruit"}
+//        ];
+//    vendors.forEach(function (v) {
+//        r.tableHead.push({display: v.name, column: v.name})
+//    });
+
+    // build display grid
+    // the display grid shows which fruits are available by each vendor
+    // we want a grid that looks like this:
+    // grid = [ {"fruit":"apple","ch":"10","st":"10"} , {"fruit":"orange"... ]}
+    for (f in fruits) if (fruits.hasOwnProperty(f)) {
+        var tableGridRow = {"fruit": f};
+
+        vendors.map(function(v) {
+            fruits[f].forEach(function(qt){
+                if (qt.vendor == v.name) {
+                    tableGridRow[v.name] = qt.qty;
+                } else
+                    tableGridRow[v.name] = '-';
+            });
+        });
+    }
+
+    return tableGridRow;
 }
 
 // Child control to show meal items

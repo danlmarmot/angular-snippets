@@ -73,9 +73,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="f in fruitsInventory.tableGrid | orderBy:sort.column:sort.descending">
-            <td>{{f}} ** </td>
-            <td ng-repeat="q in f.qtys">-- {{q}} -- </td>
+        <tr ng-repeat="row in fruitsInventory.tableGrid | orderBy:sort.column:sort.descending">
+            <td>{{row.fruit}}</td>
+            <td ng-repeat="th in fruitsInventory.tableHead">{{row[th.display]}}</td>
         </tr>
         </tbody>
       </table>
