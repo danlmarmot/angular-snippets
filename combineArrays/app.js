@@ -1,62 +1,27 @@
 var app = angular.module('myApp', []);
 
-app.service('ConfigService', ["$window", function ($window) {
-    return   $window.brekkie;
-}]);
-
-app.service('config', function ($window) {
-    return $window.brekkie;
-});
-
 app.factory('configFactory', ['$window', function(win) {
-  return {
-    getMealType: function() {
-      return "cassarole";
-    },
-
-    getCuisineType: function(name) {
-        if (name == "taco"){
-            return name + " is Mexican";
-        } else if (name == "sushi"){
-            return name + " is Japanese";
+    return {
+        getMarket: function() {
+            return win.market;
         }
-    },
-
-    getMealNames: function() {
-      // Reach up to the HTML and get the value of brekkie defined in script tag
-      return win.mealNames;
-    },
-
-    getMarket: function() {
-      return win.market;
     }
-  }
 }]);
 
-// controllers in plain old Javascript notation.  Commented out, because it won't survive minification.
-//function FoodParentCtrl($scope) {
-//  $scope.foods = ["booger", "fries"];
-//}
-
-// contorller that will survive minification.  Does the same thing
+// Controller defined in a way that survives minification.
 app.controller("FoodParentCtrl", function FoodParentCtrl($scope, configFactory) {
-
-  $scope.mealNames = configFactory.getMealNames();
   $scope.market = configFactory.getMarket();
-
-  $scope.market1 = getFirstItem($scope.market);
 
   $scope.fruitsByVendor = getFruitsByVendor($scope.market);
 
   //build out the table and add sorting
   $scope.fruitsInventory = getFruitInventory($scope.fruitsByVendor);
-  //$scope.fruitGrid = getFruitGrid($scope.fruitsByVendor);
 
-  $scope.sort = {
-        column: 'fruit',
-        descending: false
-  };
+  // These three functions and data help us do the table sorting.
+  // Initial sorting defined here
+  $scope.sort = { column: 'fruit', descending: false };
 
+  // The click handler for when you click on a column heading
   $scope.changeSorting = function(column) {
         var sort = $scope.sort;
         if (sort.column == column) {
@@ -67,7 +32,7 @@ app.controller("FoodParentCtrl", function FoodParentCtrl($scope, configFactory) 
         }
   };
 
-  //use CSS to show the sort status of  header cells
+  //The handler to change CSS class to display sort status in the table header cells
   $scope.sortClass = function(column) {
         console.log("$scope.sort.column is " + $scope.sort.column);
         console.log("$scope.sort.descending is " + $scope.sort.descending);
@@ -80,14 +45,10 @@ app.controller("FoodParentCtrl", function FoodParentCtrl($scope, configFactory) 
 
 });
 
-function getFirstItem(a) {
-  return a[0];
-}
-
 function getFruitsByVendor(market) {
     var r = {};
-    r.vendorList=[];    // list of vendors
-    r.fruitObj = {};   // list of objects like {fruit, [{vendor.name, qty},{vendor2, qty}]} objects
+    r.vendorList=[];   // list of vendors
+    r.fruitObj = {};   // list of objects like {"apple", [{vendor.name, qty},{"ThatGuy", 20}]} objects
     r.fruitList = [];
 
     market.vendors.forEach(function (v) {
@@ -114,10 +75,8 @@ function getFruitInventory(fruitsByVendor) {
     var fruits = fruitsByVendor.fruitObj;
 
     var r = {};
-    // build headers
-    r.tableHead =[
-        {display: "Froot", column: "fruit"}
-        ];
+    // Build headers
+    r.tableHead =[ {display: "Froot", column: "fruit"} ];
     vendors.forEach(function (v) {
         r.tableHead.push({display: v.name, column: v.name});
     });
@@ -128,22 +87,12 @@ function getFruitInventory(fruitsByVendor) {
 
     // build display grid
     // the display grid shows which fruits are available by each vendor
-    // we want a grid that looks like this:
+    // we want a grid that looks like this, which allows for easy table-sorting:
     // grid = [ {"fruit":"apple","ch":"10","st":"10"} , {"fruit":"orange"... ]}
     r.tableGrid =[];
 
     for (f in fruits) if (fruits.hasOwnProperty(f)) {
         var tableGridRow = {"fruit": f};
-
-//        var qtys = vendors.map(function(v) {
-//            fruits[f].forEach(function(qt){
-//                if (qt.vendor == v.name) {
-//                    tableGridRow[v.name] = qt.qty;
-//                } else
-//                    tableGridRow[v.name] = '-';
-//            });
-//        });
-
 
         fruits[f].forEach(function(qt){
             if(vendorCols.indexOf(qt.vendor) >=0 ) {
@@ -152,50 +101,8 @@ function getFruitInventory(fruitsByVendor) {
                     tableGridRow[qt.vendor] = '-';
             });
 
-        // append quantites by vendor to the row
-        //tableGridRow.push.apply(tableGridRow, qtys);
-
         r.tableGrid.push(tableGridRow);
     }
 
     return r;
 }
-
-function getFruitGrid(fruitsByVendor) {
-    var vendors = fruitsByVendor.vendorList;
-    var fruits = fruitsByVendor.fruitObj;
-
-//    var r = {};
-//    // build headers
-//    r.tableHead =[
-//        {display: "Frouit", column: "fruit"}
-//        ];
-//    vendors.forEach(function (v) {
-//        r.tableHead.push({display: v.name, column: v.name})
-//    });
-
-    // build display grid
-    // the display grid shows which fruits are available by each vendor
-    // we want a grid that looks like this:
-    // grid = [ {"fruit":"apple","ch":"10","st":"10"} , {"fruit":"orange"... ]}
-    for (f in fruits) if (fruits.hasOwnProperty(f)) {
-        var tableGridRow = {"fruit": f};
-
-        vendors.map(function(v) {
-            fruits[f].forEach(function(qt){
-                if (qt.vendor == v.name) {
-                    tableGridRow[v.name] = qt.qty;
-                } else
-                    tableGridRow[v.name] = '-';
-            });
-        });
-    }
-
-    return tableGridRow;
-}
-
-// Child control to show meal items
-// Note the parameter meal is the iterator, and changes with every new controller
-app.controller("MealItemsCtrl", function MealItemsCtrl($scope) {
-  $scope.itemPlural = $scope.meal + "s";
-});

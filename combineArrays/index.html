@@ -2,7 +2,7 @@
   
   <head>
     <script type="text/javascript">
-      var mealNames = ["breakfast", "dinner"];
+
       var market = {
         "vendors":[{
             "name": "ch",
@@ -55,7 +55,7 @@
 
     <h3>Use a Window variable to create repeating child contollers, each handling a single array value.</h3>
           <table class="t1">
-          <tr ng-repeat="(fruit,details) in fruitsByVendor.fruitObj" ng-controller="MealItemsCtrl">
+          <tr ng-repeat="(fruit,details) in fruitsByVendor.fruitObj" ng-controller="FoodParentCtrl">
             <td>{{fruit}}, {{details}}</td>
           </tr>
           </table>
