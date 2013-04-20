@@ -50,7 +50,7 @@ app.controller("FoodParentCtrl", function FoodParentCtrl($scope, configFactory) 
 
   //build out the table and add sorting
   $scope.fruitsInventory = getFruitInventory($scope.fruitsByVendor);
-  $scope.fruitGrid = getFruitGrid($scope.fruitsByVendor);
+  //$scope.fruitGrid = getFruitGrid($scope.fruitsByVendor);
 
   $scope.sort = {
         column: 'fruit',
@@ -119,7 +119,11 @@ function getFruitInventory(fruitsByVendor) {
         {display: "Froot", column: "fruit"}
         ];
     vendors.forEach(function (v) {
-        r.tableHead.push({display: v.name, column: v.name})
+        r.tableHead.push({display: v.name, column: v.name});
+    });
+
+    var vendorCols = vendors.map(function(v) {
+        return v.name;
     });
 
     // build display grid
@@ -131,14 +135,22 @@ function getFruitInventory(fruitsByVendor) {
     for (f in fruits) if (fruits.hasOwnProperty(f)) {
         var tableGridRow = {"fruit": f};
 
-        var qtys = vendors.map(function(v) {
-            fruits[f].forEach(function(qt){
-                if (qt.vendor == v.name) {
-                    tableGridRow[v.name] = qt.qty;
+//        var qtys = vendors.map(function(v) {
+//            fruits[f].forEach(function(qt){
+//                if (qt.vendor == v.name) {
+//                    tableGridRow[v.name] = qt.qty;
+//                } else
+//                    tableGridRow[v.name] = '-';
+//            });
+//        });
+
+
+        fruits[f].forEach(function(qt){
+            if(vendorCols.indexOf(qt.vendor) >=0 ) {
+                    tableGridRow[qt.vendor] = qt.qty;
                 } else
-                    tableGridRow[v.name] = '-';
+                    tableGridRow[qt.vendor] = '-';
             });
-        });
 
         // append quantites by vendor to the row
         //tableGridRow.push.apply(tableGridRow, qtys);
