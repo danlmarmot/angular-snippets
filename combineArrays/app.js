@@ -9,13 +9,13 @@ app.factory('configFactory', ['$window', function(win) {
 }]);
 
 // Controller defined in a way that survives minification.
-app.controller("FoodParentCtrl", function FoodParentCtrl($scope, configFactory) {
+app.controller("MarketCtrl", function MarketCtrl($scope, configFactory) {
   $scope.market = configFactory.getMarket();
 
   $scope.fruitsByVendor = getFruitsByVendor($scope.market);
 
   //build out the table and add sorting
-  $scope.fruitsInventory = getFruitInventory($scope.fruitsByVendor);
+  $scope.fruitsTable = getFruitTable($scope.fruitsByVendor);
 
   // These three functions and data help us do the table sorting.
   // Initial sorting defined here
@@ -34,8 +34,8 @@ app.controller("FoodParentCtrl", function FoodParentCtrl($scope, configFactory) 
 
   //The handler to change CSS class to display sort status in the table header cells
   $scope.sortClass = function(column) {
-        console.log("$scope.sort.column is " + $scope.sort.column);
-        console.log("$scope.sort.descending is " + $scope.sort.descending);
+        //console.log("$scope.sort.column is " + $scope.sort.column);
+        //console.log("$scope.sort.descending is " + $scope.sort.descending);
         if ($scope.sort.descending) {
             return column == $scope.sort.column && "header headerSortDown";
         } else {
@@ -48,58 +48,51 @@ app.controller("FoodParentCtrl", function FoodParentCtrl($scope, configFactory) 
 function getFruitsByVendor(market) {
     var r = {};
     r.vendorList=[];   // list of vendors
-    r.fruitObj = {};   // list of objects like {"apple", [{vendor.name, qty},{"ThatGuy", 20}]} objects
-    r.fruitList = [];
+    r.fruitHash = {};
 
     market.vendors.forEach(function (v) {
-        r.vendorList.push({name:v.name});
+        r.vendorList.push({name:v.name, display: v.display});
 
         v.fruitList.forEach(function(fruit) {
-            if(r.fruitObj[fruit.name]){
-                r.fruitObj[fruit.name].push({"vendor": v.name, "qty": fruit.qty});
+            if(r.fruitHash[fruit.name]) {
+                r.fruitHash[fruit.name][v.name] = fruit.qty;
             } else {
-                r.fruitObj[fruit.name] = [{"vendor": v.name, "qty": fruit.qty}];
+                r.fruitHash[fruit.name] = {};   // need to initialize if it doesn't exist
+                r.fruitHash[fruit.name][v.name] = fruit.qty;
             }
         });
     });
 
-    for (f in r.fruitObj) if (r.fruitObj.hasOwnProperty(f)) {
-        r.fruitList.push({name:f});
-    }
-
     return r;
 }
 
-function getFruitInventory(fruitsByVendor) {
+function getFruitTable(fruitsByVendor) {
     var vendors = fruitsByVendor.vendorList;
-    var fruits = fruitsByVendor.fruitObj;
+    var fruitHash = fruitsByVendor.fruitHash;
+    var r = {};         // return object
 
-    var r = {};
     // Build headers
-    r.tableHead =[ {display: "Froot", column: "fruit"} ];
+    r.tableHead =[ {display: "Froot", name: "fruit"} ];  //leftmost column
     vendors.forEach(function (v) {
-        r.tableHead.push({display: v.name, column: v.name});
-    });
-
-    var vendorCols = vendors.map(function(v) {
-        return v.name;
+        r.tableHead.push({display: v.display, name: v.name});
     });
 
     // build display grid
-    // the display grid shows which fruits are available by each vendor
+    // The display grid shows which fruits are available by each vendor
     // we want a grid that looks like this, which allows for easy table-sorting:
     // grid = [ {"fruit":"apple","ch":"10","st":"10"} , {"fruit":"orange"... ]}
     r.tableGrid =[];
 
-    for (f in fruits) if (fruits.hasOwnProperty(f)) {
-        var tableGridRow = {"fruit": f};
-
-        fruits[f].forEach(function(qt){
-            if(vendorCols.indexOf(qt.vendor) >=0 ) {
-                    tableGridRow[qt.vendor] = qt.qty;
-                } else
-                    tableGridRow[qt.vendor] = '-';
-            });
+    // loop through all fruits in the object, adding a row for each in this loop
+    for (f in fruitHash) if (fruitHash.hasOwnProperty(f)) {
+        var tableGridRow = {"fruit": f};        // the leftmost column
+        vendors.forEach(function(v){
+            if(fruitHash[f][v.name]) {
+                tableGridRow[v.name] = fruitHash[f][v.name];
+            } else {
+                tableGridRow[v.name] = '-';
+            }
+        });
 
         r.tableGrid.push(tableGridRow);
     }
