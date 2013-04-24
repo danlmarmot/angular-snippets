@@ -71,3 +71,13 @@ footer {
 .page-header {
     border-bottom: 1px solid #ddd;
 }
+
+/* Table header tweaks to show hand and not a text cursor */
+table.table thead .sorting,
+table.table thead .sorting_asc,
+table.table thead .sorting_desc,
+table.table thead .sorting_asc_disabled,
+table.table thead .sorting_desc_disabled {
+    cursor: pointer;
+    *cursor: hand;
+}
