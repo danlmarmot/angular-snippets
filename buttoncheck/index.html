@@ -49,20 +49,20 @@
           </div>
 
           <div class="span4">
-          Button Value A {[{buttonVals['A']}]}<br/>
-          Button Value B {[{buttonVals['B']}]}<br/>
-          Button Value C {[{buttonVals['C']}]}<br/>
-          Button Value D {[{buttonVals['D']}]}<br/>
-          Button Value E {[{buttonVals['E']}]}<br/>
-          &nbsp;
+          <b>ngModel Values</b><br/>
+          Button Value A: {[{buttonVals['A']}]}<br/>
+          Button Value B: {[{buttonVals['B']}]}<br/>
+          Button Value C: {[{buttonVals['C']}]}<br/>
+          Button Value D: {[{buttonVals['D']}]}<br/>
+          Button Value E: {[{buttonVals['E']}]}<br/>
+          <br/>
           Show Matches Only? {[{showMatchesOnly}]}
           </div>
      </div>
 
       <div class="row">
           <div class="span12">
-            <p>The checkboxes are just for verification.  You can use them, but the buttons won't necessarily change
-              state.
+            <p>The checkboxes work, but the style of the button won't necessarily change (it's a bug that I'm too lazy to fix.)
             <br>The buttons filter the table below, based on either the first or the last character of the fruit name.
 
             <p>The userFilterRegex: <b>{[{userFilterRegEx}]}</b></p>
