@@ -54,6 +54,8 @@
           Button Value C {[{buttonVals['C']}]}<br/>
           Button Value D {[{buttonVals['D']}]}<br/>
           Button Value E {[{buttonVals['E']}]}<br/>
+          &nbsp;
+          Show Matches Only? {[{showMatchesOnly}]}
           </div>
      </div>
 
@@ -63,7 +65,8 @@
               state.
             <br>The buttons filter the table below, based on either the first or the last character of the fruit name.
 
-            <p>The userFilterRegex: {[{userFilterRegEx}]}</p>
+            <p>The userFilterRegex: <b>{[{userFilterRegEx}]}</b></p>
+            <button button-check class="btn" ng-model="showMatchesOnly">Show Matches Only?</button></p>
           </div>
 
       </div>
@@ -73,8 +76,10 @@
           <table class="table-bordered table-striped table-condensed table small">
             <thead>
             <tr>
-                <!--<th ng:repeat="th in fruitsTable.tableHead" ng:class="sortClass(th.name)" ng:click="changeSorting(th.name)">{{th.display}}</th>-->
-                <th>fruit</th><th>qty</th>
+                <th ng:repeat="th in fruitsTable.tableHead"
+                    ng:class="sortClass(th.name)"
+                    ng:click="changeSorting(th.name)">{[{th.display}]}
+                </th>
             </tr>
             </thead>
             <tbody>
