@@ -6,6 +6,18 @@
 
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
     <script src="app.js"></script>
+    <script>
+              var fruitList = [
+                {"name": "apple", "qty": 10},
+                {"name": "mango", "qty": 20},
+                {"name": "banana", "qty": 30},
+                {"name": "durian", "qty": 20},
+                {"name": "navel orange", "qty": 30},
+                {"name": "pear", "qty": 10},
+                {"name": "blood orange", "qty": 20},
+                {"name": "blueberry", "qty": 30}
+              ];
+     </script>
 
   </head>
   
@@ -21,10 +33,11 @@
       <div class="row">
 
           <div class="span4">
-          <button button-check class="btn" ng-model="buttonVals['A']">A</button>
-          <button button-check class="btn" ng-model="buttonVals['B']">B</button>
-          <button button-check class="btn" ng-model="buttonVals['C']">C</button>
-          <button button-check class="btn" ng-model="buttonVals['D']">D</button>
+          <button button-check class="btn" ng-model="buttonVals['A']">A - first</button><br>
+          <button button-check class="btn" ng-model="buttonVals['B']">B - first</button><br>
+          <button button-check class="btn" ng-model="buttonVals['C']">C - first</button><br>
+          <button button-check class="btn" ng-model="buttonVals['D']">D - first</button><br>
+          <button button-check class="btn" ng-model="buttonVals['E']">E - last</button>
           </div>
 
           <div class="span4">
@@ -32,6 +45,7 @@
           <input type="checkbox" ng-model="buttonVals['B']"> B
           <input type="checkbox" ng-model="buttonVals['C']"> C
           <input type="checkbox" ng-model="buttonVals['D']"> D
+          <input type="checkbox" ng-model="buttonVals['E']"> E
           </div>
 
           <div class="span4">
@@ -39,20 +53,38 @@
           Button Value B {[{buttonVals['B']}]}<br/>
           Button Value C {[{buttonVals['C']}]}<br/>
           Button Value D {[{buttonVals['D']}]}<br/>
+          Button Value E {[{buttonVals['E']}]}<br/>
           </div>
+     </div>
 
+      <div class="row">
+          <div class="span12">
+            <p>The checkboxes are just for verification.  You can use them, but the buttons won't necessarily change
+              state.
+            <br>The buttons filter the table below, based on either the first or the last character of the fruit name.
 
+            <p>The userFilterRegex: {[{userFilterRegEx}]}</p>
+          </div>
 
       </div>
 
       <div class="row">
-
           <div class="span12">
-              <hr>
-            <p>P.S. Checkboxes are for visualization. Don't click them. Click the buttons.
-            <p>P.P.S. This uses twitter bootstrap classes for the buttons.
-          </div>
+          <table class="table-bordered table-striped table-condensed table small">
+            <thead>
+            <tr>
+                <!--<th ng:repeat="th in fruitsTable.tableHead" ng:class="sortClass(th.name)" ng:click="changeSorting(th.name)">{{th.display}}</th>-->
+                <th>fruit</th><th>qty</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="row in fruitsTable.tableGrid">
+                <td ng-repeat="th in fruitsTable.tableHead">{[{row[th.name]}]}</td>
+            </tr>
+            </tbody>
+          </table>
 
+          </div>
       </div>
 
     </div>
