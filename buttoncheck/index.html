@@ -1,0 +1,104 @@
+<html ng-app="myApp">
+  
+  <head>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script type="text/javascript">
+
+      var market = {
+        "vendors":[{
+            "name": "ch",
+            "display": "Chino",
+            "fruitList": [
+              {"name": "apple", "qty": 10},
+              {"name": "mango", "qty": 20},
+              {"name": "banana", "qty": 30}
+              ]
+            },
+            {
+            "name": "st",
+            "display": "Stanford",
+            "fruitList": [
+              {"name": "orange", "qty": 21},
+              {"name": "mango", "qty": 41},
+              {"name": "peach", "qty": 51},
+              {"name": "kumquat", "qty": 61}
+              ]
+            }]
+        };
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
+    <script src="app.js"></script>
+    <style>
+      table.t1 { margin: 1em 0; border-collapse: collapse; }
+      .t1 tr { border: 1px solid #666; }
+      .t1 td { padding: 10px; }
+    </style>
+  </head>
+  
+  <body>
+      <div class="container">
+
+        <div class="content">
+            <div class="page-header">
+
+         <h2>How to group an array.</h2>
+
+        </div>
+            <div class="row">
+
+    <div ng-controller="MarketCtrl" class="span12">
+    <h3>Define the market.</h3>
+
+      <p>We're going to define the market as having vendors.  Each vendor has fruit for sale.  A type of fruit, like an apple, can be
+        sold at more than one vendor, but sometimes a fruit will only be at one vendor.  We can ask each vendor what they have, and the vendor
+        will give us a list with fruit name and quantity.  This is similar to making a REST call to a given resource.
+
+      <p>The market, which is defined in Javascript in the &lt;head&gt; of this page, and retrieved via a factory call. Expect a list of two vendors with three fruit types for sale:</p>
+      Result: <b>{{market}}</b>
+
+    <hr>
+
+    <h3>Fruits by vendor</h3>
+
+    <p>Here I want to group the fruits sold, and display them by vendor.  I need to do two things first: get an ordered list of vendor names,
+       and group each fruit by its name, followed by a list of vendor objects.   I don't care about order, so a hash (erm, object in Javascript)
+       is fine, where the vendorName is assigned an integer that means "quantity".  Here's the raw data after that transformation--note that only
+       mangoes are sold at both vendors.</p>
+    <b>{{fruitsByVendor}}</b>
+
+    <hr>
+    <h3>Vendor Table</h3>
+
+        Lastly, I want to make a single $scope variable (I call it fruitsTable) that has two sub-objects under it: an array used for the header row, and then an array of row objects--with
+        the rows in the same order as the table column headers.   The cells in the table header control the sorting via ng:click, which sets the $scope.sort variable for the
+        column name to sort on and whether to sort ascending or descending.
+
+        By keeping each row as an object with each property representing a column, cells can be referred to as row.column, which also makes sorting the columns easy.
+
+        <p> The fruit table as a raw object:</p>
+        <b>{{fruitsTable}}</b>
+
+        <p>Here's that same data laid out in a sortable table:</p>
+
+        <input>
+
+      <table class="table-bordered table-striped table-condensed table small">
+        <thead>
+        <tr>
+            <th ng:repeat="th in fruitsTable.tableHead" ng:class="sortClass(th.name)" ng:click="changeSorting(th.name)">{{th.display}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="row in fruitsTable.tableGrid | orderBy:sort.column:sort.descending">
+            <td ng-repeat="th in fruitsTable.tableHead">{{row[th.name]}}</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+     </div>
+</div>
+  </body>
+
+</html>
