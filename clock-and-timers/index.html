@@ -1,0 +1,115 @@
+<html ng-app="timerApp">
+  
+  <head>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/admin.css">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
+    <script src="app.js"></script>
+  </head>
+  
+  <body>
+    <div class="container">
+
+    <div class="page-header">
+    <h2>Clock and timers</h2>
+    </div>
+
+    <div class="content" ng-controller="timerCtrl" >
+
+      <div class="row">
+      <div class="span12">
+        <p>Some simple examples on how to do a clock or timers.
+     </div>
+     </div>
+
+        
+      <div class="row">
+          <div class="span12">
+          <hr>
+            <p>Times and Dates</p>
+            <table class="table-bordered table-striped table-condensed table small">
+            <thead>
+            <tr>
+                <th>Value</th>
+                <th>Angular expression</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <tr>
+                <td class="span3"><b>{[{currentTime}]}</b></td>
+                <td class="span3">{{currentTime}}</td>
+                <td class="span6">The value of the $scope variable set to Date.now().  Updates once a second, and includes milliseconds.</td>
+            </tr>
+
+            <tr>
+                <td class="span3"><b>{[{currentEpoch}]}</b></td>
+                <td class="span3">{{currentEpoch}}</td>
+                <td class="span6">Simply Math.round(parseInt($scope.currentTime) / 1000)</td>
+            </tr>
+
+            <tr>
+                <td class="span3"><b>{[{currentTime | date:'medium'}]}</b></td>
+                <td class="span3">{{currentTime | date:'medium'}}</td>
+                <td class="span6">Applies a pre-defined date format.  More details at the <a href="http://docs.angularjs.org/api/ng.filter:date">Angular docs.</a></td>
+            </tr>
+
+            </tbody>
+            </table>
+
+          </div>
+      </div>
+
+
+      <div class="row">
+          <div class="span12">
+          <hr>
+            <p>Countdown timers</p>
+
+            <table class="table-bordered table-striped table-condensed table small">
+            <thead>
+            <tr>
+                <th>Value</th>
+                <th>Angular expression</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <tr>
+                <td class="span3"><b>{[{countdownInterval}]}</b></td>
+                <td class="span3">{{countdownInterval}}</td>
+                <td class="span6">The countdown is reset to this when it reaches zero.</td>
+            </tr>
+
+            <tr>
+                <td class="span3"><b>{[{countdownTicker}]}</b></td>
+                <td class="span3">{{countdownTicker}}</td>
+                <td class="span6">Counts the number of seconds to the next reset.</td>
+            </tr>
+
+            <tr>
+                <td class="span3"><b>{[{countdownTriggerCount}]}</b></td>
+                <td class="span3">{{countdownTriggerCount}}</td>
+                <td class="span6">Number of times the countdown's been triggered.</td>
+            </tr>
+
+            </tbody>
+            </table>
+
+          </div>
+      </div>
+    </div>
+
+    </div>
+  </body>
+</html>
+
+
+
+
+
