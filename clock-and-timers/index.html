@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="css/admin.css">
 
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
+    <script src="moment.2.0.0.min.js"></script>
     <script src="app.js"></script>
   </head>
   
@@ -15,7 +16,7 @@
     <h2>Clock and timers</h2>
     </div>
 
-    <div class="content" ng-controller="timerCtrl" >
+    <div class="content" ng-controller="timerCtrl">
 
       <div class="row">
       <div class="span12">
@@ -27,7 +28,8 @@
       <div class="row">
           <div class="span12">
           <hr>
-            <p>Times and Dates</p>
+            <h3>Updating times.</h3>
+            <p>A few examples on how to present an always-updating clock.</p>
             <table class="table-bordered table-striped table-condensed table small">
             <thead>
             <tr>
@@ -42,7 +44,8 @@
             <tr>
                 <td class="span3"><b>{[{currentTime}]}</b></td>
                 <td class="span3">{{currentTime}}</td>
-                <td class="span6">The value of the $scope variable set to Date.now().  Updates once a second, and includes milliseconds.</td>
+                <td class="span6">The value of the $scope variable set to Date.now().<br>
+                    Updates once a second, and includes milliseconds.</td>
             </tr>
 
             <tr>
@@ -67,7 +70,7 @@
       <div class="row">
           <div class="span12">
           <hr>
-            <p>Countdown timers</p>
+            <h3>Countdown timers</h3>
 
             <table class="table-bordered table-striped table-condensed table small">
             <thead>
@@ -103,6 +106,54 @@
 
           </div>
       </div>
+
+      <div class="row">
+          <div class="span12">
+          <hr>
+            <h3>Relative times</h3>
+            <p>Use the page load timestamp to show how to display relative time.  This is the "3 minutes ago" fuzzy time.</p>
+
+            <table class="table-bordered table-striped table-condensed table small">
+            <thead>
+            <tr>
+                <th>Value</th>
+                <th>Angular expression</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td class="span3"><b>{[{pageLoadDate | date:'medium'}]}</b></td>
+                    <td class="span3">{{pageLoadDate | date:'medium'}}</td>
+                    <td class="span6">The datetime when the page was loaded.</td>
+                </tr>
+
+                <tr>
+                    <td class="span3"><b>{[{pageLoadedSecondsAgo}]}</b></td>
+                    <td class="span3">{{pageLoadedSecondsAgo}}</td>
+                    <td class="span6">Seconds since when the page loaded.</td>
+                </tr>
+
+                <tr>
+                    <td class="span3"><b>{[{pageLoadedTimeAgo}]}</b></td>
+                    <td class="span3">{{pageLoadedTimeAgo}}</td>
+                    <td class="span6">Relative time for when the page was loaded.  Uses moment.js.<br>
+                                      From 0 to 45 seconds, "a few seconds ago"<br>
+                                      From 45 to 90 seconds, "a minute ago"<br>
+                                      From 90 seconds to 45 minutes, "2 minutes ago... 45 minutes ago"<br>
+                                      Other values visit <a href="http://momentjs.com/docs/#/displaying/fromnow/">the moment.js docs.</a>
+
+                    </td>
+                </tr>
+
+            </tbody>
+            </table>
+
+          </div>
+      </div>
+
     </div>
 
     </div>
