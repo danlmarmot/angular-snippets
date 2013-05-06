@@ -19,7 +19,7 @@ app.controller("MarketCtrl", function MarketCtrl($scope, configFactory) {
 
   // These three functions and data help us do the table sorting.
   // Initial sorting defined here
-  $scope.sort = { column: 'fruit', descending: false };
+  $scope.sort = { column: 'fruit', descending: false, sortKey: 'fruit.display' };
 
   // The click handler for when you click on a column heading
   $scope.changeSorting = function(column) {
@@ -28,14 +28,13 @@ app.controller("MarketCtrl", function MarketCtrl($scope, configFactory) {
             sort.descending = !sort.descending;
         } else {
             sort.column = column;
+            sort.sortKey = column + "." + 'display';
             sort.descending = false;
         }
   };
 
   //The handler to change CSS class to display sort status in the table header cells
   $scope.sortClass = function(column) {
-        //console.log("$scope.sort.column is " + $scope.sort.column);
-        //console.log("$scope.sort.descending is " + $scope.sort.descending);
         if ($scope.sort.descending) {
             return column == $scope.sort.column && "header headerSortDown";
         } else {
@@ -79,18 +78,25 @@ function getFruitTable(fruitsByVendor) {
 
     // build display grid
     // The display grid shows which fruits are available by each vendor
-    // we want a grid that looks like this, which allows for easy table-sorting:
-    // grid = [ {"fruit":"apple","ch":"10","st":"10"} , {"fruit":"orange"... ]}
+    // we want a grid that looks like this: which allows for easy table-sorting on the 'display' property:
+    // grid = [ {"fruit":{"display":"apple"},"ch":{"display":10},"st":{"display":"-"}, {"fruit":{"display":"mango"}, ...}
+    // this structure also allows for additional attributes on each cell like this:
+    // grid = [ {{"fruit":{"display":"apple","link":"http://www.apple.com"},"ch":{"display":10 ... }
     r.tableGrid =[];
 
     // loop through all fruits in the object, adding a row for each in this loop
     for (f in fruitHash) if (fruitHash.hasOwnProperty(f)) {
-        var tableGridRow = {"fruit": f};        // the leftmost column
+        var tableGridRow = {"fruit": {
+            "display": f,
+            "link": "http://www." + f + ".com"}
+        };        // the leftmost column
+        //var tableGridRow = {"fruit": f};        // the leftmost column
         vendors.forEach(function(v){
             if(fruitHash[f][v.name]) {
-                tableGridRow[v.name] = fruitHash[f][v.name];
+                tableGridRow[v.name] = {
+                    "display": fruitHash[f][v.name]};
             } else {
-                tableGridRow[v.name] = '-';
+                tableGridRow[v.name] = {"display":'-'};
             }
         });
 

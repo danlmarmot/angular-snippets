@@ -78,6 +78,9 @@
 
         <p> The fruit table as a raw object:</p>
         <b>{{fruitsTable}}</b>
+        <p>&nbsp;</p>
+
+        <p>Here's sort: {{sort}}</p>
 
         <p>Here's that same data laid out in a sortable table:</p>
 
@@ -88,8 +91,16 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="row in fruitsTable.tableGrid | orderBy:sort.column:sort.descending">
-            <td ng-repeat="th in fruitsTable.tableHead">{{row[th.name]}}</td>
+        <tr ng-repeat="row in fruitsTable.tableGrid | orderBy:sort.sortKey:sort.descending">
+            <td ng-repeat="th in fruitsTable.tableHead">
+                <div ng-show=row[th.name].link>
+                    <a href="{{row[th.name].link}}">{{row[th.name].display}}</a>
+                </div>
+                <div ng-hide=row[th.name].link>
+                    {{row[th.name].display}}
+                </div>
+            </td>
+
         </tr>
         </tbody>
       </table>
