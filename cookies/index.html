@@ -1,0 +1,84 @@
+<html ng-app="cookieApp">
+  
+  <head>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/admin.css">
+
+    <script src="angular.min.js"></script>
+    <script src="angular-cookies.min.js"></script>
+
+    <script src="app.js"></script>
+  </head>
+  
+  <body>
+    <div class="container">
+
+    <div class="page-header">
+    <h2>Cookies</h2>
+    </div>
+
+    <div class="content" ng-controller="cookieCtrl">
+
+      <div class="row">
+      <div class="span12">
+        <p>How to get and set cookies with Angular.js
+        <p>(not yet complete)</p>
+     </div>
+     </div>
+        
+      <div class="row">
+          <div class="span12">
+          <hr>
+            <h3>Cookies</h3>
+            <p>Getting and setting cookies</p>
+            <table class="table-bordered table-striped table-condensed table small">
+            <thead>
+            <tr>
+                <th>Value</th>
+                <th>Angular expression</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <tr>
+                <td class="span3"><b>{[{originalCookie}]}</b></td>
+                <td class="span3">{{originalCookie}}</td>
+                <td class="span6">The original (default) value of the cookie.</td>
+            </tr>
+
+            <tr>
+                <td class="span3"><b>{[{cookie1Value}]}</b></td>
+                <td class="span3">{{cookie1Value}}</td>
+                <td class="span6">What the cookie currently is.</td>
+            </tr>
+
+            <tr>
+                <td class="span3"><b>{[{newCookieValue}]}</b></td>
+                <td class="span3">&lt;input type="text" name="newCookieValue" ng-model="text"&gt;</td>
+                <td class="span6">The new cookie value.  Empty at first page load.</td>
+            </tr>
+
+            <tr>
+                <td class="span3"><input type="text" ng-model="newCookieValue"></td>
+                <td class="span3">&lt;input type="text" name="newCookieValue" ng-model="text"&gt;</td>
+                <td class="span6">A new cookie value to save away as the cookie1Value.</td>
+            </tr>
+
+            </tbody>
+            </table>
+
+          </div>
+      </div>
+
+    </div>
+
+    </div>
+  </body>
+</html>
+
+
+
+
+

@@ -17,23 +17,24 @@ angular.module('timerApp').controller("timerCtrl", function ($scope, $timeout) {
     $scope.pageLoadedSecondsAgo = "0";
     
     $timeout(function oncePerSecondTask(){
-        $scope.currentTime = Date.now();
-        $scope.currentEpoch = Math.round(parseInt($scope.currentTime) / 1000);
         $timeout(oncePerSecondTask, 1000);
 
+        $scope.currentTime = Date.now();
+        $scope.currentEpoch = Math.round(parseInt($scope.currentTime) / 1000);
         $scope.pageLoadedTimeAgo = moment($scope.pageLoadDate).fromNow();
         $scope.pageLoadedSecondsAgo++;
     },1000);
 
 
     $timeout(function countdownTimer(){
+        $timeout(countdownTimer, 1000);
+
         $scope.countdownTicker--;
         if ($scope.countdownTicker <= 0) {
             $scope.countdownTriggerCount++;
             $scope.countdownTicker = $scope.countdownInterval;
             //showAlert();
         }
-        $timeout(countdownTimer, 1000);
     }, 1000);
 
 });
